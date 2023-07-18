@@ -12,7 +12,7 @@ import dto.Article;
 public class ParkInfoArticleDao {
 	private String url = "jdbc:mysql://localhost:3306/baseball_tonight";
 	private String userName = "root";
-	private String password = "";
+	private String password = "qkqh134679258";
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultSet;
@@ -22,8 +22,8 @@ public class ParkInfoArticleDao {
 
 	public ParkInfoArticleDao(int parkId) {
 		this.parkId = parkId;
-		this.articles = new ArrayList<>();
 		try {
+			this.articles = new ArrayList<>();
 			connection = DriverManager.getConnection(url, userName, password);
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("select * from article where parkId = " + parkId + " ORDER BY hit DESC"); // 조회수 높은 순
@@ -44,10 +44,12 @@ public class ParkInfoArticleDao {
 	}
 
 	public ArrayList<Article> getArticleList() {
+		reSet();
 		return articles;
 	}
 
 	public ArrayList<Article> getSearchedArticle(String searchKey) {
+		reSet();
 		this.searchedArticles = new ArrayList<>();
 		for (Article a : articles) {
 			if (a.title.contains(searchKey))
@@ -59,25 +61,84 @@ public class ParkInfoArticleDao {
 	}
 	
 	public Article getArticle(String articleTitle)	{
+		reSet();
 		for(int i = 0; i < articles.size(); i++) {
 			if(articles.get(i).title.equals(articleTitle)) {
-				increaseHit(articles.get(i).id,i);
+				increaseHit(articles.get(i).id);
 				return articles.get(i);
 			}
 		}
 		return null;
 	}
+
+	public void doArticleWrite(String title, String body, int parkId) {
+		try {
+			statement.executeUpdate("INSERT INTO article\n" +
+					"SET regDate = NOW(),\n" +
+					"title = '" + title + "',\n" +
+					"`body` = '" + body + "',\n" +
+					"memberId = 2,\n" + // 회원기능 추가 후 변경
+					"hit = 0,\n" +
+					"recommend = 0,\n" +
+					"parkId = " + parkId + ";");
+		} catch(SQLException e){}
+	}
+
+	public void doArticleModify(String title, String body, int articleId) {
+		try {
+			statement.executeUpdate("UPDATE article\n" +
+					"SET title = '" + title + "',\n" +
+					"`body` = '" + body + "'\n" +
+					"WHERE id = " + articleId + ";");
+		} catch(SQLException e){}
+	}
+
+	public void doArticleDelete(int articleId) {
+		try {
+			statement.executeUpdate("DELETE FROM article WHERE id = " + articleId + ";");
+		} catch (SQLException e) {}
+	}
 	
 	
-	
-	
-	private void increaseHit(int id, int index) {
+	private void increaseHit(int id) {
 		try {
 			statement.executeUpdate("UPDATE article SET hit = hit + 1 WHERE id = " + id);
 		} catch ( Exception e) {}
-		articles.get(index).hit++;
-		
-	}
+	} // 조회수 증가 함수
+
+	public void increaseRecommend(int id) {
+		try {
+			statement.executeUpdate("UPDATE article SET recommend = recommend + 1 WHERE id = " + id);
+		} catch ( Exception e) {}
+	} // 추천수 증가 함수
+
+	public void decreaseRecommend(int id) {
+		try {
+			statement.executeUpdate("UPDATE article SET recommend = recommend - 1 WHERE id = " + id);
+		} catch ( Exception e) {}
+	} // 추천수 감소 함수
+
+	private void reSet() {
+		try {
+			this.articles = new ArrayList<>();
+			connection = DriverManager.getConnection(url, userName, password);
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("select * from article where parkId = " + parkId + " ORDER BY hit DESC"); // 조회수 높은 순
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+				String regDate = resultSet.getString("regDate");
+				String title = resultSet.getString("title");
+				String body = resultSet.getString("body");
+				int memberId = resultSet.getInt("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
+				int hit = resultSet.getInt("hit");
+				int recommend = resultSet.getInt("recommend");
+
+				articles.add(new Article(id, regDate, title, body, memberId, hit, recommend));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	} // articles 새로 세팅.
 }
 
 

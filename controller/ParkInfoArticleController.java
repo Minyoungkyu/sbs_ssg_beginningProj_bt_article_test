@@ -16,12 +16,6 @@ public class ParkInfoArticleController { // 새로 추가된 Controller class
 		this.parkId = parkId;
 		this.parkInfoArticleService =  new ParkInfoArticleService(parkId);
 		this.sc = new Scanner(System.in);
-		
-		System.out.println("< " + parkName + " 자유게시판 >");
-        System.out.println("--------------------------");
-        parkInfoArticleService.showArticleList(); // 게시글 목록
-        System.out.println("--------------------------");
-        System.out.println();
 		 while1 : while (true) {
 			 	showParkInfoArticleMenu();
 			 	System.out.println();
@@ -65,11 +59,36 @@ public class ParkInfoArticleController { // 새로 추가된 Controller class
 	                	System.out.println();
 	            		System.out.printf("게시글 제목 입력 >> ");
 	            		String articleTitle = sc.nextLine();
-	                	parkInfoArticleService.showArticleDetail(articleTitle); // 게시글 조회
+	                	parkInfoArticleService.showArticleDetail(articleTitle,sc); // 게시글 조회
 	                }
-	                if (command == 3) parkInfoArticleService.doArticleWrite(); // 게시글 작성 (로그인 옵션 추가 필요)
-	                if (command == 4) parkInfoArticleService.doArticleModify(); // 게시글 수정 ( 로그인 옵션 추가 필요 // memberId 와 대조 권한 확인)
-	                if (command == 5) parkInfoArticleService.doArticleDelete(); // 게시글 삭제 ( 로그인 옵션 추가 필요 // memberId 와 대조 권한 확)
+	                if (command == 3) {
+						System.out.println();
+						System.out.println("<게시글 작성>");
+						System.out.printf("제목입력 >> ");
+						String title = sc.nextLine();
+						System.out.printf("내용입력 >> ");
+						String body = sc.nextLine();
+						parkInfoArticleService.doArticleWrite(title,body,parkId); // 게시글 작성 (로그인 옵션 추가 필요)
+
+					}
+	                if (command == 4) {
+						System.out.println();
+						System.out.println("<게시글 수정>");
+						System.out.println();
+						System.out.printf("게시글 제목 입력 >> ");
+						String articleTitle = sc.nextLine();
+						System.out.println();
+						parkInfoArticleService.doArticleModify(articleTitle,sc); // 게시글 수정 ( 로그인 옵션 추가 필요 // memberId 와 대조 권한 확인)
+					}
+	                if (command == 5) {
+						System.out.println();
+						System.out.println("<게시글 삭제>");
+						System.out.println();
+						System.out.printf("게시글 제목 입력 >> ");
+						String articleTitle = sc.nextLine();
+						System.out.println();
+						parkInfoArticleService.doArticleDelete(articleTitle,sc); // 게시글 삭제 ( 로그인 옵션 추가 필요 // memberId 와 대조 권한 확)
+					}
 
 	            } // else
 	        } // while 끝
@@ -77,6 +96,12 @@ public class ParkInfoArticleController { // 새로 추가된 Controller class
 	
 	private void showParkInfoArticleMenu() {
 		System.out.println("\n");
+		System.out.println("< " + parkName + " 자유게시판 >");
+		System.out.println();
+		System.out.println("--------------------------");
+		parkInfoArticleService.showArticleList(); // 게시글 목록
+		System.out.println("--------------------------");
+		System.out.println();
         System.out.println("1. 게시글 검색");
         System.out.println("2. 게시글 조회");
         System.out.println("3. 게시글 작성");
