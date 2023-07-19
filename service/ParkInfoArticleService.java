@@ -5,11 +5,13 @@ import java.util.*;
 
 import dao.ParkInfoArticleDao;
 import dto.Article;
+import dto.ArticleReply;
 
 public class ParkInfoArticleService {
 	
 	private ParkInfoArticleDao parkInfoArticleDao;
 	private ArrayList<Article> articles;
+	private ArrayList<ArticleReply> replys;
 	
 	public ParkInfoArticleService(int parkId) {
 		this.parkInfoArticleDao = new ParkInfoArticleDao(parkId);
@@ -46,7 +48,7 @@ public class ParkInfoArticleService {
 		
 	}
 	
-	public void showArticleDetail(String articleTitle,Scanner sc)	{
+	public int showArticleDetail(String articleTitle,Scanner sc)	{
 		Article article = parkInfoArticleDao.getArticle(articleTitle);
 		
 		if(article == null) {
@@ -54,7 +56,7 @@ public class ParkInfoArticleService {
 			System.out.println("제목 입력이 잘못되었습니다.");
 			System.out.println("정확한 제목을 입력해주세요.");
 			System.out.println();
-			return;
+			return -1;
 		}
 		
 		System.out.println(article.id + "번 게시글 ( 조회수 : " + article.hit + " ) "
@@ -65,21 +67,7 @@ public class ParkInfoArticleService {
 		System.out.println("추천수 : " + article.recommend);
 		System.out.println();
 		System.out.println();
-
-		System.out.println("1. 추천하기"); // 추천기능 너무 막 만들었다. 빼버리던가 업그레이드 하는것이 좋겠다.
-		System.out.println("2. 추천취소");
-		System.out.println("3. 뒤로가기");
-		int command = sc.nextInt();
-		if ( command == 1 ) {
-			parkInfoArticleDao.increaseRecommend(article.id);
-			return;
-		} else if ( command == 2 ) {
-			parkInfoArticleDao.decreaseRecommend(article.id);
-			return;
-		} else return;
-
-		
-		
+		return 0;
 	}
 	
 	public void doArticleWrite(String title, String body, int parkId) { // 로그인 옵션 필요
@@ -143,8 +131,41 @@ public class ParkInfoArticleService {
 				}
 			}
 		}
-
-
+	}
+	
+	public void showArticleRecommendList(String articleTitle) {
+		this.replys = parkInfoArticleDao.getArticleReplyList(parkInfoArticleDao.getArticle(articleTitle).id);
+		System.out.println();
+		System.out.println("<댓글 목록>");
+		System.out.println();
+		if (replys.size() == 0) {
+			System.out.println("댓글이 없습니다.");
+			System.out.println();
+		}
+		for (ArticleReply ar : replys) {
+			System.out.println(ar.memberId + " : " + ar.body + " ( " + ar.regDate + " )");
+		}
+		System.out.println();
+	}
+	
+	public void doArticleReplyWrite(String articleTitle, String body) {
+		parkInfoArticleDao.doArticleReplyWrite(body, parkInfoArticleDao.getArticle(articleTitle).id);
+		System.out.println();
+		System.out.println("댓글 작성이 완료되었습니다.");
+		System.out.println();
+	
+	}
+	
+	public void doArticleRecommendIncrease(String articleTitle) {
+		parkInfoArticleDao.increaseRecommend(parkInfoArticleDao.getArticle(articleTitle).id);
+		System.out.println("추천완료!");
+		System.out.println();
+	}
+	
+	public void doArticleRecommendDecrease(String articleTitle) {
+		parkInfoArticleDao.decreaseRecommend(parkInfoArticleDao.getArticle(articleTitle).id);
+		System.out.println("추천취소!");
+		System.out.println();
 	}
 
 }

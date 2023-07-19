@@ -5,7 +5,7 @@ import java.sql.*;
 public class ParkInfoDao {
     private String url = "jdbc:mysql://localhost:3306/baseball_tonight";
     private String userName = "root";
-    private String password = "qkqh134679258";
+    private String password = "";
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
