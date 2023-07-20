@@ -8,13 +8,15 @@ import util.Util;
 public class ParkInfoArticleController { // 새로 추가된 Controller class
 	private Scanner sc;
 	private int parkId;
+	private String mem_id;
 	private String parkName;
 	private ParkInfoArticleService parkInfoArticleService; // service 패키지 ParkInfoArticleSerive 추가.
 
-	public ParkInfoArticleController(int parkId, String parkName) {
+	public ParkInfoArticleController(int parkId, String parkName, String mem_id) {
 		this.parkName = parkName;
 		this.parkId = parkId;
-		this.parkInfoArticleService = new ParkInfoArticleService(parkId);
+		this.mem_id = mem_id;
+		this.parkInfoArticleService = new ParkInfoArticleService(parkId,mem_id);
 		this.sc = new Scanner(System.in);
 		while1: while (true) {
 			showParkInfoArticleMenu();
@@ -39,10 +41,10 @@ public class ParkInfoArticleController { // 새로 추가된 Controller class
 				System.out.println();
 				continue;
 			} else if (command == 0) {
-				new MainMenuController();
+				new MainMenuController();/////////////////이거 고쳐!!!!
 				break;
 			} else if (command == 9) {
-				new ParkInfoController();
+				new ParkInfoController(mem_id);
 				break;
 			} else {
 				if (command == 1) {
@@ -80,7 +82,7 @@ public class ParkInfoArticleController { // 새로 추가된 Controller class
 							String body = sc.nextLine();
 							parkInfoArticleService.doArticleReplyWrite(articleTitle, body);
 						} else
-							break;
+							continue;
 					}
 
 				}

@@ -1,9 +1,12 @@
 package controller;
 
 import java.util.Arrays;
+
 import java.util.List;
 import java.util.Scanner;
 import util.Util;
+
+
 
 
 public class MainMenuController {
@@ -54,7 +57,7 @@ public class MainMenuController {
     
     public void showMainMenu() { // 메뉴 변경시 수정!
         System.out.println();
-        System.out.println("<메뉴>");
+        System.out.println("< Stadium >");
         System.out.println("1. 게시글 작성");
         System.out.println("2. 게시글 목록");
         System.out.println("3. 게시글 검색");

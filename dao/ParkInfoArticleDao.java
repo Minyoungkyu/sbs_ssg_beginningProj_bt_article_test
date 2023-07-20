@@ -34,7 +34,7 @@ public class ParkInfoArticleDao {
 				String regDate = resultSet.getString("regDate");
 				String title = resultSet.getString("title");
 				String body = resultSet.getString("body");
-				int memberId = resultSet.getInt("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
+				String memberId = resultSet.getString("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
 				int hit = resultSet.getInt("hit");
 				int recommend = resultSet.getInt("recommend");
 
@@ -73,13 +73,13 @@ public class ParkInfoArticleDao {
 		return null;
 	}
 
-	public void doArticleWrite(String title, String body, int parkId) {
+	public void doArticleWrite(String title, String body, int parkId, String mem_id) {
 		try {
 			statement.executeUpdate("INSERT INTO article\n" +
 					"SET regDate = NOW(),\n" +
 					"title = '" + title + "',\n" +
 					"`body` = '" + body + "',\n" +
-					"memberId = 2,\n" + // 회원기능 추가 후 변경
+					"memberId = '" + mem_id + "',\n" + // 회원기능 추가 후 변경
 					"hit = 0,\n" +
 					"recommend = 0,\n" +
 					"parkId = " + parkId + ";");
@@ -101,12 +101,12 @@ public class ParkInfoArticleDao {
 		} catch (SQLException e) {}
 	}
 	
-	public void doArticleReplyWrite(String body, int articleId) { // memberId 고쳐야함!!!
+	public void doArticleReplyWrite(String body, int articleId, String mem_id) { // memberId 고쳐야함!!!
 		try {
 			statement.executeUpdate("INSERT INTO article_reply\r\n"
 					+ "SET regDate = NOW(),\r\n"
 					+ "`body` = '" + body + "',\r\n"
-					+ "memberId = 1,\r\n" // memberId 수정
+					+ "memberId = '" + mem_id + "',\r\n" // memberId 수정
 					+ "articleId = " + articleId + ",\r\n"
 					+ "recommend = 0;");
 		} catch (SQLException e) {}
@@ -150,9 +150,10 @@ public class ParkInfoArticleDao {
 				int id = resultSet.getInt("id");
 				String regDate = resultSet.getString("regDate");
 				String body = resultSet.getString("body");
-				int memberId = resultSet.getInt("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
-
+				String memberId = resultSet.getString("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로
+				
 				replys.add(new ArticleReply(id, regDate, body, memberId));
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -172,7 +173,7 @@ public class ParkInfoArticleDao {
 				String regDate = resultSet.getString("regDate");
 				String title = resultSet.getString("title");
 				String body = resultSet.getString("body");
-				int memberId = resultSet.getInt("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
+				String memberId = resultSet.getString("memberId"); // 나중에 query문 join 으로 바꾸고 String 으로 작성자 닉네임 새로 받아야함.
 				int hit = resultSet.getInt("hit");
 				int recommend = resultSet.getInt("recommend");
 

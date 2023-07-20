@@ -6,11 +6,11 @@ public class Article {
 	public String regDate;
 	public String title;
 	public String body;
-	public int memberId; // memberId 가 String 으로 바뀌어야 함
+	public String memberId; // memberId 가 String 으로 바뀌어야 함
 	public int hit;
 	public int recommend;
 	
-	public Article(int id, String regDate, String title, String body, int memberId, int hit, int recommend) { // memberId 가 String 으로 바뀌어야 함.
+	public Article(int id, String regDate, String title, String body, String memberId, int hit, int recommend) { // memberId 가 String 으로 바뀌어야 함.
 		this.id = id;
 		this.regDate = regDate;
 		this.title = title;

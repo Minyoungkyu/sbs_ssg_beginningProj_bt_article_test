@@ -1,17 +1,11 @@
-import controller.MainMenuController;
+import controller.ParkInfoController;
 
 public class App {
-    private MainMenuController mainMenuController;
+    private ParkInfoController parkInfoController;
     public void start() {
+    	 	
 
-        System.out.println("== 프로그램 시작 ==");
-        mainMenuController = new MainMenuController();
-
-
-
-
-
-
+        parkInfoController = new ParkInfoController(mem_id);
 
     }
 

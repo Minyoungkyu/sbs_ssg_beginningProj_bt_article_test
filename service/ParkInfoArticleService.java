@@ -12,8 +12,10 @@ public class ParkInfoArticleService {
 	private ParkInfoArticleDao parkInfoArticleDao;
 	private ArrayList<Article> articles;
 	private ArrayList<ArticleReply> replys;
+	private String mem_id;
 	
-	public ParkInfoArticleService(int parkId) {
+	public ParkInfoArticleService(int parkId, String mem_id) {
+		this.mem_id = mem_id;
 		this.parkInfoArticleDao = new ParkInfoArticleDao(parkId);
 	}
 	
@@ -71,7 +73,7 @@ public class ParkInfoArticleService {
 	}
 	
 	public void doArticleWrite(String title, String body, int parkId) { // 로그인 옵션 필요
-		parkInfoArticleDao.doArticleWrite(title,body,parkId);
+		parkInfoArticleDao.doArticleWrite(title,body,parkId,mem_id);
 
 		System.out.println("게시글이 작성되었습니다.");
 		System.out.println();
@@ -83,6 +85,12 @@ public class ParkInfoArticleService {
 		if(article == null) {
 			System.out.println("게시글 제목이 없습니다.");
 			System.out.println("수정하실 게시글의 제목을 정확히 입력해주세요.");
+			System.out.println();
+			return;
+		}
+		
+		if(!(article.memberId.equals(mem_id))) {
+			System.out.println("게시글 수정 권한이 없습니다.");
 			System.out.println();
 			return;
 		}
@@ -100,6 +108,12 @@ public class ParkInfoArticleService {
 		if(article == null) {
 			System.out.println("게시글 제목이 없습니다.");
 			System.out.println("삭제하실 게시글의 제목을 정확히 입력해주세요.");
+			System.out.println();
+			return;
+		}
+		
+		if(!(article.memberId.equals(mem_id))) {
+			System.out.println("게시글 삭제 권한이 없습니다.");
 			System.out.println();
 			return;
 		}
@@ -149,7 +163,7 @@ public class ParkInfoArticleService {
 	}
 	
 	public void doArticleReplyWrite(String articleTitle, String body) {
-		parkInfoArticleDao.doArticleReplyWrite(body, parkInfoArticleDao.getArticle(articleTitle).id);
+		parkInfoArticleDao.doArticleReplyWrite(body, parkInfoArticleDao.getArticle(articleTitle).id, mem_id);
 		System.out.println();
 		System.out.println("댓글 작성이 완료되었습니다.");
 		System.out.println();

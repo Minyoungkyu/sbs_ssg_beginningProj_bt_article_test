@@ -9,12 +9,14 @@ import java.util.Scanner;
 public class ParkInfoController {
     private Scanner sc;
     private int parkId;
+    private String mem_id;
     private ParkInfoService parkInfoService;
     private ParkInfoArticleController parkInfoArticleController; // ParkInfoArticleController 추가(controller 패키지에 articlecontroller 따로 분리)
     private String[] parkNames = {"롯데 자이언츠", "한화이글스", "KIA 타이거즈", "LG 트윈스", "두산 베어스", "NC 다이노스", "SSG 랜더스", "KT 위즈", "키움 히어로즈", "삼성 라이온즈"}; // database 상 야구장 id(primary) 와 index(+1)번호를 맞추는게 좋을듯
 
-    public ParkInfoController() {
+    public ParkInfoController(String mem_id) {
         sc = new Scanner(System.in);
+        this.mem_id = mem_id;
         ParkInfoController_selectPark();
         } // while 끝
 
@@ -77,10 +79,10 @@ public class ParkInfoController {
                 System.out.println();
                 continue;
             } else if (command == 0) {
-                new MainMenuController();
+                new MainMenuController(); /// 이거 고쳐!!!!!!!!!!!!!!!!!!!!!!!!
                 break;
             } else if (command == 8) { // else-if 문 전부 추가됨
-            	parkInfoArticleController = new ParkInfoArticleController(parkId, parkNames[parkId]);
+            	parkInfoArticleController = new ParkInfoArticleController(parkId, parkNames[parkId],mem_id);
             	break;
             } else if (command == 9) {
                 ParkInfoController_selectPark();
